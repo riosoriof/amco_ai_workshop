@@ -1,0 +1,11 @@
+name: Validar estándares AMCO
+on: [pull_request, push]
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node tools/validar-trazabilidad.js
+      - run: cd api && npm ci && npm test

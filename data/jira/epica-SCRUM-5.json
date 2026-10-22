@@ -1,0 +1,15 @@
+{
+  "_nota": "Respaldo ficticio del proyecto SCRUM en thelg.atlassian.net (workshop AMCO)",
+  "epica": {
+    "key": "SCRUM-5",
+    "summary": "Perfiles infantiles con control parental",
+    "description": "Contexto: los suscriptores piden un espacio seguro para niños. Objetivo: perfiles infantiles que solo muestren y reproduzcan contenido apto, con PIN parental. Reglas: máximo 5 perfiles por cuenta; clasificaciones AA, A, B, B15, C, D; perfil infantil hasta A por defecto, el titular puede subirlo hasta B; PIN de 4 dígitos, 3 intentos fallidos bloquean 15 minutos; pantallas simultáneas Básico 2, Premium 4, el perfil infantil cuenta como pantalla; TVOD en perfil infantil pendiente con Producto; búsqueda y recomendaciones filtran contenido no apto. RNF: autorización de reproducción p95 < 300 ms con 5,000 usuarios concurrentes; pico x3 en 5 minutos. Fuera de alcance: tiempo de pantalla y reportes para padres."
+  },
+  "historias": [
+    {"key": "SCRUM-6", "summary": "Crear perfil infantil", "description": "Como titular de la cuenta quiero crear un perfil infantil para que mis hijos solo vean contenido apto. Notas: máximo 5 perfiles por cuenta. Clasificación máxima por defecto A.", "criterios": "- Se crea el perfil con nombre y avatar\n- No se permite crear más de 5 perfiles"},
+    {"key": "SCRUM-7", "summary": "Filtrar catálogo y búsqueda por clasificación en perfil infantil", "description": "El perfil infantil no debe mostrar contenido no apto en catálogo, búsqueda ni recomendaciones.", "criterios": ""},
+    {"key": "SCRUM-8", "summary": "Autorizar reproducción según clasificación y pantallas simultáneas", "description": "Validar al iniciar una reproducción que el contenido sea apto para el perfil y que no se exceda el límite de pantallas del plan (Básico 2, Premium 4). API: POST /api/v1/playback/sessions. NFR: p95 < 300 ms con 5,000 usuarios concurrentes; pico x3 en 5 minutos.", "criterios": "Dado un perfil infantil con clasificación máxima A, cuando intenta reproducir un título B15, entonces la API responde 403 con código PARENTAL_RESTRICTION.\nDado un plan Básico con 2 reproducciones activas, cuando se intenta iniciar una tercera, entonces la API responde 409 con código CONCURRENCY_LIMIT."},
+    {"key": "SCRUM-9", "summary": "PIN parental para salir del perfil infantil", "description": "Pedir PIN de 4 dígitos para salir del perfil infantil o cambiar su clasificación. Bloquear después de varios intentos.", "criterios": ""},
+    {"key": "SCRUM-10", "summary": "Contenido rentado (TVOD) en perfil infantil", "description": "Definir si el contenido rentado por el titular puede verse desde el perfil infantil. Pendiente decisión de Producto.", "criterios": ""}
+  ]
+}

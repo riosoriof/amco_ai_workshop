@@ -1,0 +1,17 @@
+# Prepara el entorno del Copilot coding agent (lab 7): instala dependencias para que pueda correr las pruebas.
+name: "Copilot Setup Steps"
+on:
+  workflow_dispatch:
+  push:
+    paths: [.github/workflows/copilot-setup-steps.yml]
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: cd api && npm ci

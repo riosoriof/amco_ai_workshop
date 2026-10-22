@@ -1,0 +1,62 @@
+openapi: 3.0.3
+info:
+  title: API demo de perfiles y reproducción (ficticia)
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/v1/catalog:
+    get:
+      summary: Catálogo filtrado por la clasificación del perfil
+      parameters:
+        - { name: profileId, in: query, required: true, schema: { type: string } }
+      responses:
+        '200': { description: Lista de contenidos aptos }
+        '404': { description: PROFILE_NOT_FOUND }
+  /api/v1/profiles:
+    post:
+      summary: Crear perfil
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [accountId, name]
+              properties:
+                accountId: { type: string }
+                name: { type: string }
+                kids: { type: boolean, default: false }
+                maxRating: { type: string, enum: [AA, A, B, B15, C, D] }
+      responses:
+        '201': { description: Perfil creado }
+        '400': { description: VALIDATION_ERROR }
+        '404': { description: ACCOUNT_NOT_FOUND }
+        '409': { description: PROFILE_LIMIT (máximo 5 perfiles por cuenta) }
+        '422': { description: RATING_NOT_ALLOWED (perfil infantil hasta B) }
+  /api/v1/playback/sessions:
+    post:
+      summary: Iniciar reproducción
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [profileId, contentId]
+              properties:
+                profileId: { type: string }
+                contentId: { type: string }
+      responses:
+        '201': { description: Sesión creada }
+        '403': { description: PARENTAL_RESTRICTION }
+        '404': { description: PROFILE_NOT_FOUND / CONTENT_NOT_FOUND }
+        '409': { description: CONCURRENCY_LIMIT (Básico 2, Premium 4) }
+  /api/v1/playback/sessions/{id}:
+    delete:
+      summary: Detener reproducción
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '204': { description: Sesión detenida }
+        '404': { description: SESSION_NOT_FOUND }
